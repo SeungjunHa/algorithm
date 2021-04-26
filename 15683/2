@@ -1,0 +1,24 @@
+#include <cstdio>
+#include <vector>
+#include <queue>
+
+int N, M;
+int map[8][8];
+
+void print_map(int smap[8][8])
+{
+	for(int i=0;i<N;i++) {
+		for(int j=0;j<M;j++) 
+			printf("%d ", smap[i][j]);
+		printf("\n");
+	}
+}
+int main()
+{
+	scanf("%d %d", &N, &M);
+	for(int i=0;i<N;i++) 
+		for(int j=0;j<M;j++) 
+			scanf("%d", &map[i][j]);
+		
+	print_map(map);	
+}
