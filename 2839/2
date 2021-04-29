@@ -1,0 +1,35 @@
+#include <cstdio>
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <string>
+#include <algorithm>
+#include <climits>
+
+using namespace std;
+
+#define likely(x) __builtin_expect((x), 1)
+#define unlikely(x) __builtin_expect((x), 0)
+
+
+int main(void)
+{
+	ios_base :: sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+
+	int N = 18;
+	int cnt = 0;
+	while(1) {
+		N -= 5;
+		if(N < 0) {
+			N += 5;
+			N -= 3;
+		}
+		cnt++;
+		if(!N)
+			break;
+	}
+	printf("%d\n", cnt);
+	return 0;
+}
