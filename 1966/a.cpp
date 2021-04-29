@@ -23,7 +23,7 @@ int main(void)
 		int M, Index;
 		cin >> M >> Index;
 		queue <pair<int, int>> q;
-		priority_queue <int> pq;
+		priority_queue <int, vector<int>> pq;
 
 		vector<int> arr(M, 0);
 		for(int index=0;index<M;index++) {
