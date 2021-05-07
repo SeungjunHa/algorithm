@@ -12,10 +12,10 @@ using namespace std;
 #define likely(x) __builtin_expect((x), 1)
 #define unlikely(x) __builtin_expect((x), 0)
 
-int dp[501][501];
-int sum[501];
-int arr[501];
-int min_k[501][501];
+int dp[5001][5001];
+int sum[5001];
+int arr[5001];
+int min_k[5001][5001];
 
 int main(void)
 {
@@ -36,8 +36,7 @@ int main(void)
 			sum[i] = arr[i-1] + sum[i-1];	
 			min_k[i][i] = i;
 		}
-		int k = 1;
-	
+		int k = 1;	
 		for(int i=0;i<num;i++) {
 			for(int j=0;j<num-k;j++) {
 				int row = j;
@@ -66,11 +65,12 @@ int main(void)
 		(num[i][j] 는 dp[i][k] + dp[k][j] 가 최소가 되게 하는 k(i < k < j) 값)
 */
 				for(int t=min_k[row][col-1]; t<=min_k[row+1][col]; t++) {
-					if(dp[row][col] > dp[row][t]+dp[t+1][col]+diff) {
-						dp[row][col] = dp[row][t]+dp[t+1][col]+diff;
+					if(dp[row][col] > dp[row][t]+dp[t+1][col]) {
+						dp[row][col] = dp[row][t]+dp[t+1][col];
 						min_k[row][col] = t;
 					}
 				}
+				dp[row][col] += diff;
 #if 0
 				/* Slow Version(144ms) : Search all t between row, col */
 				for(int t=row;t<col;t++) 
