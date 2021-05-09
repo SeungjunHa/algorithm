@@ -20,35 +20,24 @@ int main(void)
 
 	string str;
 	cin >> str;
-	cout << str << endl;
-	char temp[4] = { 'P', 'P', 'A', 'P' };
+	int cnt = 0;
 	for(int i=0;i<str.size();i++) {
-		printf("%d %c\n", i, str[i]);
 		if(str[i] == 'P') {
-			int remain = 0, cnt = 0, flag = 1, start = i;
-			while(1) {
-				if(str[start+remain] == 'U')
-					start++;
-				printf("[%d %c] : [%d %c]\n", 
-						start+remain, str[start+remain], remain, temp[remain]);
-				if(str[start+remain] == temp[remain]) 
-					remain++;
-				else
-					flag = 0;
-				if(remain == 4) 
-					break;
-				cnt++;
-				if(cnt > 5)
-					break;
-			}
-			if(flag) {
-				for(int j=i+1;j<i+4;j++) {
-					str[j] = 'U';
-				}
-			}
+			cnt++;
+			continue;
+		}
+		if(cnt >= 2 && str[i+1] == 'P') {
+			cnt--;
+			i++;
+		} else {
+			printf("NP\n");
+			return 0;
 		}
 	}
-
-
+	
+	if(cnt == 1)
+		printf("PPAP\n");
+	else
+		printf("NP\n");
 	return 0;
 }
