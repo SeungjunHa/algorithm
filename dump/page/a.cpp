@@ -158,63 +158,34 @@ void LFU(vector<int> page_ref, int M)
 void MIN(vector<int> page_ref, int M, int K)
 {
 	vector<Page_Frame> page_frame(M, { -1, false });
-	map<int, int> page_map;
-
-	for(int i=0;i<K;i++) {
-		int page = page_ref[i];
-		if(page_map.find(page) == page_map.end()) {
-			page_map.insert(make_pair(page, 1));
-			continue;
-		}
-		page_map.find(page)->second += 1;
-	}
-	map<int, int>::iterator iter;
-	for(iter = page_map.begin() ; iter != page_map.end(); iter++)
-		printf("%d %d\n", iter->first, iter->second);
 	
-	vector<int> lru_count(M, -1);
-	vector<int> lfu_count(M, 0);
 	int hit_count = 0, miss_count = 0, index = 0, num_entry = 0;
 	bool search = false;
 	for(int i=0;i<K;i++) {
 		search = search_page_fifo(page_frame, page_ref[i]);
-		page_map.find(page_ref[i])->second -= 1;
-		printf("Current : %d\n", page_ref[i]);
 		if(search) {
-			printf("Hit\n");
 			hit_count++;
 			continue;
 		} 
-		printf("Miss\n");
 		miss_count++;
-		if(num_entry < M) {
+		if(num_entry < M) 
 			index = num_entry;
-			page_frame[index] = { page_ref[i], true };
-			lru_count[index] = i;
-			lfu_count[index]++;
-		} else {
-			int min = 1500;
-			for(iter = page_map.begin() ; iter != page_map.end(); iter++) {
-				if(iter->second == 0)
-					continue;
-				min = iter->second < min ? iter->second : min;
-				printf("nn : %d %d\n", iter->first, iter->second);
-			}
-			vector<int> min_candidate;
-			for(iter = page_map.begin() ; iter != page_map.end(); iter++) 
-				if(iter->second == min)
-					min_candidate.push_back(iter->first);
-			printf("Min : %d / %ld\n", min, min_candidate.size());
-			for(int j=K-1; j>i; j--) {
-				for(int k=0;k<min_candidate.size();k++) {
-					if(page_ref[j] == min_candidate[k]) {
-						index = j;
-						break;
-					}
+		else {
+			vector<int> distance(M, K);
+			for(int j=i;j<K;j++) 
+				for(int k=0;k<M;k++) 
+					if(page_ref[j] == page_frame[k].page_number) 
+						distance[k] = distance[k] < j ? distance[k] : j;
+					
+			int max = -1;
+			for(int j=0;j<M;j++) {
+				if(distance[j] > max) {
+					max = distance[j];
+					index = j;
 				}
 			}
-			printf("Index maybe : %d\n", index);
 		}
+		page_frame[index] = { page_ref[i], true };
 		num_entry++;
 	}
 	printf("====MIN Result====\n");
@@ -232,9 +203,9 @@ int main(void)
 	for(int i=0;i<K;i++) 
 		cin >> page_ref[i];
 
-/*	FIFO(page_ref, M);
+	FIFO(page_ref, M);
 	LRU(page_ref, M);	
-	LFU(page_ref, M);*/
+	LFU(page_ref, M);
 	MIN(page_ref, M, K);
 
 	return 0;
